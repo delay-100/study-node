@@ -1,0 +1,16 @@
+<html>
+<head></head>
+<body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+   axios.get('https://www.zerocho.com/api/get') // 해당 서버로부터 정보를 받아온다
+   .then((res)=> { // axois도 내부에 new Promise가 들어있어 then과 catch의 사용이 가능하다
+       console.log(res);
+       console.log(res.data); // {}
+   })
+   .catch((error)=>{
+       console.error(error);
+   });
+</script>
+</body>
+</html>

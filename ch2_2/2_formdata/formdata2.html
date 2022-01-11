@@ -1,0 +1,37 @@
+<html>
+<head></head>
+<body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+ const formData = new FormData();
+ formData.append('name','zerocho');
+ formData.append('item','orange');
+ formData.append('item','melon');
+ formData.has('item'); // true
+ formData.has('money'); //false;
+ formData.get('item'); // orange
+ formData.getAll('item'); // ['orange', 'melon'];
+ formData.append('test',['hi','zero']);
+ formData.get('test'); // hi, zero
+ formData.delete('test');
+ formData.get('test'); // null
+ formData.set('item', 'apple');
+ formData.getAll('item'); // ['apple'];
+
+ // 여기부터 추가내용
+ (async () => {
+     try {
+         const formData = new FormData();
+         formData.append('name', 'zerocho');
+         formData.append('birth', 1994);
+         const result = await axios.post('https://www.zerocho.com/api/post/formdata', formData); // 두 번째 인수에 데이터를 넣어서 보냄
+         console.log(result);
+         console.log(result.data);
+     }
+     catch(error){
+         console.error(error);
+     }
+ })();
+</script>
+</body>
+</html>

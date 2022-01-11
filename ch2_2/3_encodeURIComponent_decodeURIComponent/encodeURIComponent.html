@@ -1,0 +1,17 @@
+<html>
+<head></head>
+<body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+   (async () => {
+    try {
+        const result = await axios.get(`https://www.zerocho.com/api/search/${encodeURIComponent('노드')}`); // 노드라는 한글주소가 %EB%85%B8%EB%93%9C라는 문자열로 변환됨
+        console.log(result);
+        console.log(result.data); // {}
+    } catch(error){
+        console.error(error);
+    }
+   })();
+</script>
+</body>
+</html>

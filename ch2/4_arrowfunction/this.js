@@ -1,4 +1,4 @@
-// 입력
+// this 바인드 방식(function함수 사용)
 var relationship1 = {
     name: 'zero',
     friends: ['nero', 'hero', 'xero'],
@@ -11,6 +11,7 @@ var relationship1 = {
 };
 relationship1.logFriends();
 
+// this 바인드 방식(화살표 함수 사용) 
 const relationship2 = {
     name: 'zero',
     friends: ['nero', 'hero', 'xero'],
