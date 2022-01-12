@@ -1,0 +1,1 @@
+module.exports = () => global.message; // global.message 값을 반환하는 함수
