@@ -12,7 +12,7 @@ if(cluster.isMaster){
     cluster.on('exit', (worker, code, signal) => {
         console.log(`${worker.process.pid}번 워커가 종료되었습니다.`);
         console.log('code', code, 'signal', signal);
-        cluster.fork();
+        cluster.fork(); // 워커 프로세스 생성
     });
 } else {
     // 워커들이 포트에서 대기

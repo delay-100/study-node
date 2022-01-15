@@ -1,4 +1,4 @@
-// http2적용 
+// http2
 
 const http2 = require('http2');
 const fs = require('fs');

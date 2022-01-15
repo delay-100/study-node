@@ -3,7 +3,7 @@ const fs = require('fs').promises;
 const url = require('url');
 const qs= require('querystring');
 
-// parseCookies : 문자열을 객체로 바꿔줌
+// parseCookies : 문자열을 객체로 바꿔줌, 실행 결과 : {mycookie : 'test'}
 const parseCookies = (cookie = '') => 
     cookie
         .split(';')
