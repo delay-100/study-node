@@ -16,6 +16,7 @@ app.get('/',(req, res, next) => {
     throw new Error('에러는 에러 처리 미들웨어로 갑니다.') 
 });
 
+// 위에 만약 next(err)가 있는 경우 바로 이 함수가 실행됨 
 app.use((err, req, res, next) =>{
     console.error(err);
     res.status(500).send(err.message);

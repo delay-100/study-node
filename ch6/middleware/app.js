@@ -50,8 +50,13 @@ app.use(session({
 
 app.use((req, res, next) => {
     console.log('모든 요청에 다 실행됩니다.');
+    req.data = '데이터 넣기';
+    next();
+}, (req, res, next)=>{
+    console.log(req.data);
     next();
 });
+
 app.get('/',(req, res, next) => {
     console.log('GET / 요청에서만 실행됩니다.');
     next();
