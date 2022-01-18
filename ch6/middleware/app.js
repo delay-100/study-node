@@ -14,6 +14,19 @@ const userRouter = require('./routes/user');
 const app = express();
 app.set('port', process.env.PORT || 3000);
 
+// pug
+// app.set('views', path.join(__dirname, 'views')); // views는 템플릿 파일들이 위치한 폴더를 지정
+// app.set('view engine', 'pug'); // pug 템플릿을 이용한다고 나타냄
+
+// 넌적스
+app.set('view engine', 'html'); // 넌적스임을 구분하려면 html 대신 njk를 쓰면 됨
+const nunjucks = require('nunjucks');
+nunjucks.configure('views', { // 폴더 경로: views
+    express: app, // 위에 const app = express();라서 app객체 즉, express 함수를 넣음
+    watch: true, // html 파일이 변경될 때, 템플릿 엔진을 다시 렌더링
+});
+
+
 // req, res, next들은 미들웨어 내부에 들어있음
 // morgan
 app.use(morgan('dev')); 
@@ -115,9 +128,10 @@ app.post('/upload', upload.fields([{name: 'image1'},{name: 'image2'}]),
 // req.sessionID; //세션 아이디 확인
 // req.session.destroy(); // 세션 모두 제거
 
-app.use((req, res, next) => {
-    res.status(404).send('Not Found'); // 일치하는 라우터가 없을 때 404 상태 코드를 응답
-});
+// 에러처리
+// app.use((req, res, next) => {
+//     res.status(404).send('Not Found'); // 일치하는 라우터가 없을 때 404 상태 코드를 응답
+// });
 
 app.use((req, res, next) => {
     console.log('모든 요청에 다 실행됩니다.');
@@ -131,13 +145,25 @@ app.use((req, res, next) => {
 app.get('/',(req, res, next) => {
     console.log('GET / 요청에서만 실행됩니다.');
     next();
-}, (req, res) => { // 요청이 오면 무조건 에러 처리
- //   throw new Error('에러는 에러 처리 미들웨어로 갑니다.') 
+}, (req, res) => {
+    //    throw new Error('에러는 에러 처리 미들웨어로 갑니다.')  // 요청이 오면 무조건 에러 처리
+});
+
+// 에러 처리
+app.use((req, res, next) => {
+const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
+    error.status = 404;
+    next(error);
 });
 
 app.use((err, req, res, next) =>{
     console.error(err);
-    res.status(500).send(err.message);
+    // res.status(500).send(err.message);
+    res.locals.message = err.message; // res.locals 속성에 값을 대입해 템플릿 엔진에 변수를 주입, message라는 변수를 넣음
+    res.locals.error = process.env.NODE_ENV !== 'production' ? err : {}; // 배포 환경이 아닐 시에만 표시, process.env.NODE_ENV : 시스템 환경
+    res.status(err.status || 500); // 굳이 안줘도 되지만 서버에서 그냥 에러상태 주는 것,,
+    // res.render('error.pug');
+    res.render('error'); // error.html 파일이 렌더링 됨
 });
 
 app.listen(app.get('port'), () => {

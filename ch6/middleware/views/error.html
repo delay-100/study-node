@@ -1,0 +1,8 @@
+<!-- 직접적으로 실행되는 파일 -->
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1>{{message}}</h1>
+<h1>{{error.status}}</h1>
+<pre>{{error.stack}}</pre>
+{% endblock %}
