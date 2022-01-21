@@ -110,7 +110,7 @@ document.getElementById('user-form').addEventListener('submit', async (e) => {
         return alert('나이를 입력하세요');
     }
     try{
-        await axios.post('/users', {name, age, married});
+        await axios.post('/users', {name, age, married}); // axios.post('http://192.168.0.17:3000/users')
         getUser();
     } catch(err){
         console.error(err);
@@ -119,28 +119,6 @@ document.getElementById('user-form').addEventListener('submit', async (e) => {
     e.target.age.value = '';
     e.target.married.checked = false;
 });
-// 댓글 등록 시
-document.getElemenetById('comment-form').addEventListener('submit', async(e)=>{
-    e.preventDefault();
-    const id = e.target.userid.value;
-    const comment = e.target.comment.value;
-    if(!id){
-        return alert('아이디를 입력하세요');
-    }
-    if(!comment){
-        return alert('댓글을 입력하세요');
-    }
-    try {
-        await axios.post('/comments', { id, comment });
-        getComment(id);
-    } catch(err){
-        console.error(err);
-    }
-    e.target.userid.value = '';
-    e.target.comment.value = '';
-    e.target.married.checked = false;
-});
-
 // 댓글 등록 시
 document.getElementById('comment-form').addEventListener('submit', async(e)=>{
     e.preventDefault();
