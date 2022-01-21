@@ -4,6 +4,9 @@ const morgan = require('morgan');
 const nunjucks = require('nunjucks');
 
 const { sequelize } = require('./models'); // require('./models/index.js')와 같음 - index.js는 require 시 이름 생략 가능 
+const indexRouter = require('./routes');
+const usersRouter = require('./routes/users');
+const commentsRouter = require('./routes/comments');
 
 const app = express();
 app.set('port', process.env.PORT || 3001);
@@ -21,9 +24,13 @@ sequelize.sync({force: false}) // 서버 실행 시 MySQL과 연동되도록 함
     });
 
 app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/',express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/comments', commentsRouter);
 
 app.use((req,res,next) => {
     const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);

@@ -2,7 +2,7 @@
 document.querySelectorAll('#user-list tr').forEach((el) => {  // id: #, el: element 반복문
     el.addEventListener('click', function() {
         const id = el.querySelector('td').textContent; // body 값(모든 요소를 포함한)을 하나씩 불러옴 (user.id, user.name, user.age, '기혼' if user.married else '미혼')
-                                                        // textContent VS innderText(사람이 읽을 수 있는 텍스트만 불러옴)
+                                                        // textContent VS innerText(사람이 읽을 수 있는 텍스트만 불러옴)
         getComment(id); // getComment 함수 호출(아래에 작성되어있음)
     });
 });
@@ -10,10 +10,10 @@ document.querySelectorAll('#user-list tr').forEach((el) => {  // id: #, el: elem
 // 사용자 로딩 함수
 async function getUser(){   
     try{
-        const res = await axios.get('/users');
-        const users = res.data;
+        const res = await axios.get('/users');  // app.js의 '/users'에 의해 결국, User.findAll()이 가져와짐
+        const users = res.data; // res의 데이터부분을 가져옴
         console.log(users);
-        const tbody = document.querySelector('#user-list tbody');
+        const tbody = document.querySelector('#user-list tbody'); 
         tbody.innerHTML = '';
         users.map(function (user){
             const row = document.createElement('tr');
