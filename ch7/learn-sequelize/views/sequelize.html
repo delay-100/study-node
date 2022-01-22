@@ -10,7 +10,7 @@
 </head>
 <body>
     <div> 
-        <from id="user-form">
+        <form id="user-form">
             <fieldset>  {# fieldset: 웹 양식의 여러 컨트롤과 레이블(<label>)을 묶을 때 사용 #}
                 <legend>사용자 등록</legend>  {# legend: <fieldset> 요소의 캡션(caption)을 정의할 때 사용 #}
                 <div><input id="username" type="text" placeholder="이름"></div>
@@ -18,7 +18,7 @@
                 <div><input id="married" type="checkbox"><label for="married">결혼여부</label></div>
                 <button type="submit">등록</button>
             </fieldset>
-        </from>
+        </form>
     </div>
     <br>
     <table id="user-list"> {# 표를 만드는 태그 #}
@@ -43,7 +43,7 @@
     </table>
     <br>
     <div>
-        <from id="comment-form">
+        <form id="comment-form">
         <fieldset>
             <legend>댓글 등록</legend>
             <div><input id="userid" type="text" placeholder="사용자 아이디"></div>
@@ -66,6 +66,6 @@
     <tbody></tbody>
     </table>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script> {# AJAX(페이지 이동X) - axios 사용 언급 #}
-    <script src="/sequelize.js"></script>
+    <script src="/sequelize.js"></script> {# app.js의 app.use('/',express.static(path.join(__dirname, 'public')));에 의해 접근 가능 #}
 </body>
 </html>

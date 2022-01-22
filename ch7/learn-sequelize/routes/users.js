@@ -16,20 +16,21 @@ router.route('/')
     })
     .post(async (req, res, next) => {
         try {
-            const user = await User.create({
-                name: req.body.name,
-                age: req.body.age,
-                married: req.body.married,
+            const user = await User.create({ // 유저모델 생성
+                name: req.body.name, // sequelize.js에서 전송받은 name값을 가져옴
+                age: req.body.age, // sequelize.js에서 전송받은 age값을 가져옴
+                married: req.body.married, // sequelize.js에서 전송받은 married값을 가져옴
             });
             console.log(user);
-            res.status(201).json(user);
+            res.status(201).json(user); // 성공 user(응답) 전송
         } catch(err){
             console.error(err);
             next(err);
-        }
+        }   
     });
 
-router.get('/:id/comments', async(req, res, next) => {
+// id에 맞는 comments들이 반환됨
+router.get('/:id/comments', async(req, res, next) => { 
     try{
         const comments = await Comment.findAll({
             include: {

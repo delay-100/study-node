@@ -6,13 +6,13 @@ const nunjucks = require('nunjucks');
 const { sequelize } = require('./models'); // require('./models/index.js')와 같음 - index.js는 require 시 이름 생략 가능 
 const indexRouter = require('./routes');
 const usersRouter = require('./routes/users');
-// console.log (usersRouter);
 const commentsRouter = require('./routes/comments');
 
-const app = express();
-app.set('port', process.env.PORT || 3001);
+const app = express(); // require해온 express 실행 
+
+app.set('port', process.env.PORT || 3001); // 포트번호 3001로 세팅
 app.set('view engine', 'html');
-nunjucks.configure('views', {
+nunjucks.configure('views', { // render 시, views 폴더로 이동
     express: app,
     watch: true,
 });
@@ -25,10 +25,11 @@ sequelize.sync({force: false}) // 서버 실행 시 MySQL과 연동되도록 함
     });
 
 app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, 'public'))); //'/',
+app.use('/',express.static(path.join(__dirname, 'public'))); // static이라서 사용자가 public 아래의 하위 폴더에 모두 접근 가능
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
+// 라우터 분리
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/comments', commentsRouter);
