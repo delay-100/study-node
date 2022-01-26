@@ -34,6 +34,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/comments', commentsRouter);
 
+// 라우터 주소가 없을 때 감
 app.use((req,res,next) => {
     const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
     error.status = 404;
