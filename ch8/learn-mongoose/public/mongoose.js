@@ -1,7 +1,7 @@
 // 사용자 이름을 클릭할 때 댓글 로딩
 document.querySelectorAll('#user-list tr').forEach((el)=> {
     el.addEventListener('click', function() {
-        const id = el.querySelector('td').textConetnt;
+        const id = el.querySelector('td').textContent;
         getComment(id);
     });
 });
@@ -26,18 +26,21 @@ async function getUser(){
             td.textContent = user.name;
             row.appendChild(td);
             td = document.createElement('td');
+            td.textContent = user.age;
+            row.appendChild(td);
+            td = document.createElement('td');
             td.textContent = user.married ? '기혼' : '미혼';
             row.appendChild(td);
             tbody.appendChild(row);
         });
     } catch(err){
-        console.error(err);
+        console.log(err);
     }
 }
 // 댓글 로딩
 async function getComment(id){
     try {
-        const res = await axois.get(`/users/${id}/comments`);
+        const res = await axios.get(`/users/${id}/comments`);
         const comments = res.data;
         const tbody = document.querySelector('#comment-list tbody');
         tbody.innerHTML = '';
@@ -64,7 +67,7 @@ async function getComment(id){
                     await axios.patch(`/comments/${comment._id}`, { comment: newComment});
                     getComment(id);
                 } catch(err){
-                    console.error(err);
+                    console.log(err);
                 }
             });
             const remove = document.createElement('button');
@@ -74,7 +77,7 @@ async function getComment(id){
                     await axios.delete(`/comments/${comment._id}`);
                     getComment(id);
                 } catch(err){
-                    console.error(err);
+                    console.log(err);
                 }
             });
             // 버튼 추가
@@ -87,7 +90,7 @@ async function getComment(id){
             tbody.appendChild(row);
         });
     } catch(err){
-        console.error(err);
+        console.log(err);
     }
 }
 // 사용자 등록 시
@@ -106,7 +109,7 @@ document.getElementById('user-form').addEventListener('submit', async(e)=> {
         await axios.post('/users', { name, age, married});
         getUser();
     } catch(err){
-        console.error(err);
+        console.log(err);
     }
     e.target.username.value = '';
     e.target.age.value = '';
@@ -127,7 +130,7 @@ document.getElementById('comment-form').addEventListener('submit', async (e) => 
         await axios.post('/comments', {id, comment});
         getComment(id);
     } catch(err){
-        console.error(err);
+        console.log(err);
     }
     e.target.userid.value='';
     e.target.comment.value='';

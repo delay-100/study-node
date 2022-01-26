@@ -2,15 +2,15 @@
   "name": "delay100_mongoose",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "app.js"
+    "start": "nodemon app"
   },
   "author": "delay100",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.2",
-    "mongoose": "^6.1.8",
+    "mongoose": "^5.9.10",
     "morgan": "^1.10.0",
     "nunjucks": "^3.2.3"
   },

@@ -38,14 +38,16 @@
                     <th>결혼여부</th>
                 </tr>
             </thead>
-            {% for user in users %}
-                <tr>
-                    <td>{{user.id}}</td>
-                    <td>{{user.name}}</td>
-                    <td>{{user.age}}</td>
-                    <td>{{'기혼' if user.married else '미혼'}}</td>
-                </tr>
-            {% endfor %}
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{user.id}}</td>
+                        <td>{{user.name}}</td>
+                        <td>{{user.age}}</td>
+                        <td>{{'기혼' if user.married else '미혼'}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
         <br>
         <div>

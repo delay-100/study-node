@@ -1,3 +1,4 @@
+// html이 로딩되었을 때 실행됨(기존 데이터)
 // 사용자 이름을 눌렀을 때 댓글 로딩
 document.querySelectorAll('#user-list tr').forEach((el) => {  // id: #, el: element 반복문
     el.addEventListener('click', function() {
@@ -16,6 +17,7 @@ async function getUser(){
         tbody.innerHTML = ''; // 일단 tbody에 대한 모든 내용을 초기화함
         users.map(function (user){ // map: 반복문
             const row = document.createElement('tr'); // tr을 생성하면서 빈 row 객체 생성
+            // 추가된 데이터에 대한 listener도 필요
             row.addEventListener('click', () => { // 이 row를 클릭하면 실행
                 getComment(user.id); // getComment 함수 실행(파라미터로 user의 id를 줌)
                 console.log(user.id);
@@ -63,7 +65,6 @@ async function getComment(id) {
             // 수정
             const edit = document.createElement('button'); // 수정 버튼
             edit.textContent = '수정';
-            console.log(edit);
             edit.addEventListener('click', async () => { // 수정 클릭 시 
                 const newComment = prompt('바꿀 내용을 입력하세요');
                 if (!newComment){
