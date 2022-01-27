@@ -50,8 +50,9 @@
             document.getElementById('img').addEventListenr('chanage', function(e){
                 const formData = new FormData();
                 console.log(this, this.files);
-                formData.append('img', this.files[0]);
-                axios.post('/post/img', formData)
+                formData.append('img', this.files[0]);  // 서버에 있는 가장 첫 번째 multer 파일 업로드, 썸네일 추가
+                                                        // formData.append(key, value)인데 key에 있는 변수를 서버에서도 사용해야 함, this는 e.target  
+                axios.post('/post/img', formData) // 두 번째 인수에 데이터를 넣어서 보냄
                     .then((res)=>{
                         document.getElementById('img-url').value = res.data.url;
                         document.getElementById('img-preview').src = res.data.url;
@@ -64,7 +65,7 @@
         }
         document.querySelectorAll('.twit-follow').forEach(function(tag) {
             tag.addEventListener('click', function() {
-                const myId = document.querySelector('#my-id');
+                const myId = document.querySelector('#my-id'); // myId는 <input id="my-id" type="hidden" value="{{user.id}}">
                 if(myId){
                     const userId = tag.parentNode.querySelector('.twit-user-id').value;
                     if(userId !== myId.value){
