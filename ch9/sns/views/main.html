@@ -1,8 +1,9 @@
+{# 1. user 변수가 존재할 때 게시글 업로드 폼을 보여줌, 2. 모든 사람에게 twits 보여줌 #}
 {% extends 'layout.html' %}
 
 {% block content %}
     <div class="timeline">
-        {% if user %}
+        {% if user %} {# user가 존재하는 경우 #}
         <div>
             <form id="twit-form" action="/post" method="post" enctype="multipart/form-data">
                 <div class="input-group">
@@ -25,12 +26,12 @@
                 <input type="text" name="hashtag" placeholder="태그 검색">
                 <button class="btn">검색</button>
             </form>
-        {% for twit in twits %}
+        {% for twit in twits %} {# 렌더링 시 twits 배열 안의 요소들을 읽어서 게시글로 만듦 #}
             <div class="twit">
                 <input type="hidden" value="{{twit.User.id}}" class="twit-user-id">
                 <input type="hidden" value="{{twit.id}}" class="twit-id">
                 <div class="twit-author">{{twit.User.nick}}</div>
-                {% if not followerIdList.includes(twit.User.id) and twit.User.id !== userid %} 
+                {% if not followerIdList.includes(twit.User.id) and twit.User.id !== userid %} {# 작성자를 제외하고, 나의 팔로워 아이디 목록에 작성자의 아이디가 없으면 팔로우 버튼을 보여주기 위함 #}
                 <button class="twit-follow">팔로우하기</button>
                 {% endif %}
                 <div class="twit-content">{{twit.content}}</div>
