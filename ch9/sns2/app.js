@@ -8,6 +8,7 @@ const dotenv = require('dotenv');
 
 dotenv.config(); // .env 파일을 쓸 수 있게 함
 const pageRouter = require('./routes/page');
+const { sequelize } = require('./models');
 
 const app = express();
 app.set('port', process.env.PORT || 8001);
@@ -17,7 +18,16 @@ nunjucks.configure('views', {
     watch: true,
 });
 
-app.use(morgan('dev'));
+// sequelize와 db 연결
+sequelize.sync({ force: false })
+    .then(() =>{
+        console.log('데이터베이스 연결 성공');
+    })
+    .catch((err)=> {
+        console.error(err);
+    });
+
+app.use(morgan('dev')); // morgan 연결 후 localhost:3000에 다시 접속하면 기존 로그 외 추가적인 로그를 볼 수 있음
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
