@@ -29,7 +29,7 @@ router.get('/', (req, res, next) => {
     const twits = [];
     res.render('main', {
         title: 'sns',
-        twits,
+        twits, // 추후에 추가
     });
 });
 

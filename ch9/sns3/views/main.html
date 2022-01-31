@@ -47,7 +47,7 @@
 {% block script %}
     <script>
         if(document.getElementById('img')){
-            document.getElementById('img').addEventListenr('chanage', function(e){
+            document.getElementById('img').addEventListener('change', function(e){
                 const formData = new FormData();
                 console.log(this, this.files);
                 formData.append('img', this.files[0]);  // 서버에 있는 가장 첫 번째 multer 파일 업로드, 썸네일 추가

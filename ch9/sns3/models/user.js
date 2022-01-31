@@ -20,7 +20,7 @@ module.exports = class User extends Sequelize.Model { // User 모델을 만들�
             provider: { // 로그인 방식
                 type: Sequelize.STRING(10),
                 allowNull: false,
-                defualtValue: 'local', // 기본 값 local 로그인, sns으로 로그인 한 경우는 kakao 저장 
+                defaultValue: 'local', // 기본 값 local 로그인, sns으로 로그인 한 경우는 kakao 저장 
             },
             snsId: { // snsId
                 type: Sequelize.STRING(30),

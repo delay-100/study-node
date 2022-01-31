@@ -9,11 +9,12 @@ const passport = require('passport');
 
 dotenv.config(); // .env 파일을 쓸 수 있게 함
 const pageRouter = require('./routes/page');
+const authRouter = require('./routes/auth');
 const { sequelize } = require('./models');
 const passportConfig = require('./passport'); // require('./passport/index.js')와 같음
 
 const app = express();
-passportConfig(); // 패스포트 설정, 한 번 실행해두면 ()에 있는 deserializeUser 계속 실행
+passportConfig(); // 패스포트 설정, 한 번 실행해두면 ()에 있는 deserializeUser 계속 실행 - passport/index.js
 app.set('port', process.env.PORT || 8001);
 app.set('view engine', 'html');
 nunjucks.configure('views', {
@@ -53,6 +54,7 @@ app.use(passport.session()); // req.session 객체에 passport 정보를 저장(
 
 // 라우터 연결
 app.use('/', pageRouter);
+app.use('/auth', authRouter);
 
 // 라우터가 없을 때 실행 
 app.use((req,res,next)=>{
