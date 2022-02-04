@@ -1,7 +1,7 @@
 // app.js에서 기본 router로 설정한 page.js
-const express = require("express");
-const { isLoggedIn, isNotLoggedIn } = require("./middlewares"); // 구조분해할당으로 middlewares의 두 미들웨어를 가져옴
-const { Post, User } = require("../models");
+const express = require('express');
+const { isLoggedIn, isNotLoggedIn } = require('./middlewares'); // 구조분해할당으로 middlewares의 두 미들웨어를 가져옴
+const { Post, User } = require('../models');
 
 const router = express.Router();
 
@@ -16,17 +16,17 @@ router.use((req, res, next) => {
 });
 
 // http://127.0.0.1:8001/profile 에 get요청이 왔을 때
-router.get("/profile", isLoggedIn, (req, res) => {
+router.get('/profile', isLoggedIn, (req, res) => {
   res.render("profile", { title: "내 정보 - sns" });
 });
 
 // http://127.0.0.1:8001/join 에 get요청이 왔을 때
-router.get("/join", isNotLoggedIn, (req, res) => {
+router.get('/join', isNotLoggedIn, (req, res) => {
   res.render("join", { title: "회원가입 - sns" });
 });
 
 // http://127.0.0.1:8001/ 에 get요청이 왔을 때
-router.get("/", async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const posts = await Post.findAll({ // db에서 게시글을 조회 
       include: {

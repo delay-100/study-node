@@ -15,8 +15,20 @@ module.exports = () => {
     
     // deserializeUser: 세션에 저장한 아이디를 통해 사용자 정보 객체를 불러옴
     // passport.session 미들웨어가 이 메소드를 호출
+    // 라우터가 실행되기 전 먼저 실행됨! -> 모든 요청이 들어올 때 매번 사용자의 정보를 조회함(db에 큰 부담 -> 메모리에 캐싱 또는 레디스 같은 db 사용)
     passport.deserializeUser((id, done) => { // deserializeUser: 매 요청 시 실행, id: serializerUser의 done으로 id 인자를 받음
-        User.findOne({where:{id}}) // db에 해당 id가 있는지 확인
+        User.findOne({
+            where:{id}, // db에 해당 id가 있는지 확인
+            include: [{
+                model: User,
+                attributes: ['id', 'nick'], // 속성을 id와 nick으로 지정함으로서, 실수로 비밀번호를 조회하는 것을 방지
+                as: 'Followers',
+            }, {
+                model: User,
+                attributes: ['id', 'nick'],
+                as: 'Followings',
+            }],
+        }) 
         .then(user => done(null, user)) // req(요청).user에 저장 -> 앞으로 req.user을 통해 로그인한 사용자의 정보를 가져올 수 있음
         .catch(err => done(err));
     });     

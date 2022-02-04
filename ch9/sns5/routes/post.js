@@ -46,15 +46,17 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {// uploa
             UserId: req.user.id,
         });
         const hashtags = req.body.content.match(/#[^\s#]+/g); // /#[%\s#]: 해시태그 정규표현식
+
         if (hashtags) { // 위의 식으로 추출된 해시태그가 존재하면
             const result = await Promise.all(  // 아래에서 map으로 여러 개의 해시태그가 나오기 때문에 Promise.all 사용
-                hashtgas.map(tag => {
+                hashtags.map((tag ,idx)=> {
                     return Hashtag.findOrCreate({ // sequelize 메소드(데이터베이스에 해시태그가 존재하면 가져오고, 존재하지 않으면 생성 후 가져옴), Hashtag 생성 
                                                  // 결과값으로 [모델, 생성 여부] 반환
                         where: { title: tag.slice(1).toLowerCase()}, // 해시태그에서 #을 떼고 소문자로 바꿈 
                     })
                 }),
             );
+            console.log(result);
             await post.addHashtags(result.map(r => r[0])); // result.map(r => r[0]): 모델만 추출함, post.addHashtags(): 해시태그 모델들을 게시글과 연결
         } 
         res.redirect('/');

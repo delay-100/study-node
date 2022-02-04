@@ -1,3 +1,4 @@
+// 모듈 불러오기
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
@@ -8,9 +9,13 @@ const dotenv = require('dotenv');
 const passport = require('passport');
 
 dotenv.config(); // .env 파일을 쓸 수 있게 함
+// 라우터 연결
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
-const { sequelize } = require('./models');
+const postRouter = require('./routes/post');
+const userRouter = require('./routes/user');
+
+const { sequelize } = require('./models');  // require('./models/index.js')와 같음, 구조분해 할당으로 sequelize 가져옴
 const passportConfig = require('./passport'); // require('./passport/index.js')와 같음
 
 const app = express();
@@ -32,7 +37,10 @@ sequelize.sync({ force: false })
     });
 
 app.use(morgan('dev')); // morgan 연결 후 localhost:3000에 다시 접속하면 기존 로그 외 추가적인 로그를 볼 수 있음
+
+// static 폴더 설정
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/img', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 app.use(cookieParser(process.env.COOKIE_SECRET)); // .env 파일의 COOKIE_SECRET 변수 사용 - 보안 UP
@@ -55,6 +63,8 @@ app.use(passport.session()); // req.session 객체에 passport 정보를 저장(
 // 라우터 연결
 app.use('/', pageRouter);
 app.use('/auth', authRouter);
+app.use('/post', postRouter);
+app.use('/user', userRouter);
 
 // 라우터가 없을 때 실행 
 app.use((req,res,next)=>{
@@ -65,7 +75,7 @@ app.use((req,res,next)=>{
 
 app.use((err, req, res, next) => {
     res.locals.message = err.message;
-    res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
+    res.locals.error = process.env.NODE_ENV !== 'production' ? err : {}; // 개발용
     res.status(err.status || 500);
     res.render('error');
 });
