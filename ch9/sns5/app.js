@@ -22,7 +22,7 @@ const app = express();
 passportConfig(); // 패스포트 설정, 한 번 실행해두면 ()에 있는 deserializeUser 계속 실행 - passport/index.js
 app.set('port', process.env.PORT || 8001);
 app.set('view engine', 'html');
-nunjucks.configure('views', {
+nunjucks.configure('views', { // 넌적스의 파일을 views 폴더에 저장
     express: app,
     watch: true,
 });
