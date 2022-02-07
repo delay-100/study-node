@@ -41,8 +41,11 @@ app.use(morgan('dev')); // morgan 연결 후 localhost:3000에 다시 접속하�
 // static 폴더 설정
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/img', express.static(path.join(__dirname, 'uploads')));
+
+// body-parser
 app.use(express.json());
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({extended:false})); // extended 옵션이 false면 노드의 querystring 모듈을 사용하여 쿼리스트링을 해석
+                                                // extended 옵션이 true면 qs 모듈을 사용하여 쿼리스트링을 해석 - qs 모듈은 내장 모듈이 아닌 npm의 패키지(querystring 모듈의 기능을 좀 더 확장한 모듈임)
 app.use(cookieParser(process.env.COOKIE_SECRET)); // .env 파일의 COOKIE_SECRET 변수 사용 - 보안 UP
 
 //express-session, 인수: session에 대한 설정

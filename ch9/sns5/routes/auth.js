@@ -7,9 +7,9 @@ const User = require('../models/user');
 
 const router = express.Router();
 
-// 회원가입 라우터, /join
+// 회원가입 라우터, /auth/join
 router.post('/join', isNotLoggedIn, async (req, res, next) => {
-    const { email, nick, password } = req.body;
+    const { email, nick, password } = req.body; // body-parser 덕분에 views/join.html의 form에 있는 name="email, nick, password" 들을 req.body로 가져올 수 있음
     try {
         const exUser = await User.findOne({ where: {email}});  // User db에 같은 email이 있는지 확인  
         if(exUser){ // 이미 User가 존재하면
@@ -18,19 +18,19 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
         // User이 존재하지 않으면(회원가입 가능)
         const hash = await bcrypt.hash(password, 12); // bcrypt 모듈을 이용해 비밀번호 암호화 - crypto 모듈의 pbkdf2 메서드를 이용해 암호화도 가능
                                                      // 두번째 인수(추천- 12~31): pbkdf2의 반복횟수와 유사, 숫자가 커질수록 비밀번호를 알아내기 어렵지만 암호화 시간도 오래걸림 
-        await User.create({
+        await User.create({ // db에 user 생성
             email,
             nick,
             password: hash,
         });
-        return res.redirect('/');
+        return res.redirect('/'); // routes/page.js의 get "/"로 이동
     } catch (error) {
         console.error(error);
         return next(error);
     }
 });
 
-// 로컬 로그인 라우터, /login
+// 로컬 로그인 라우터, /auth/login
 router.post('/login', isNotLoggedIn, (req, res, next) =>{
     passport.authenticate('local', (authError, user, info) => { // passport.authenticate('local') 미들웨어가 로컬로그인 전략(passport/localStrategy.js) 수행
                                                                 // 미들웨어인데 라우터 미들웨어 안에 들어있음 - 미들웨어에 사용자 정의 기능을 추가하고 싶은 경우
@@ -52,14 +52,14 @@ router.post('/login', isNotLoggedIn, (req, res, next) =>{
     })(req, res, next); // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙힘
 });
 
-// 로그아웃 라우터, /logout
+// 로그아웃 라우터, /auth/logout
 router.get('/logout', isLoggedIn, (req, res) => {
     req.logout(); // req.user 객체를 제거함
     req.session.destroy(); // req.session 객체의 내용을 제거함 -  세션 정보를 지움
     res.redirect('/'); // 메인 페이지로 돌아감
 });
 
-// 카카오 로그인 라우터, /kakao
+// 카카오 로그인 라우터, /auth/kakao
 router.get('/kakao', passport.authenticate('kakao')); // 카카오 api가 get으로 되어있어서 무조건 get으로 받아옴
                                                       // passport가 알아서 kakao 로그인 창으로 redirect 함
 // 카카오 로그인 후 성공 여부 결과를 받음                                                      
