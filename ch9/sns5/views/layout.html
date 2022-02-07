@@ -12,7 +12,8 @@
         <div class="container">
             <div class="profile-wrap">
                 <div class="profile">
-                    {% if user and user.id %} {# 렌더링 시 user가 존재하면 사용자 정보, 팔로잉, 팔로워 수를 보여줌 #}
+                    {# 렌더링 시 user가 존재하면 사용자 정보, 팔로잉, 팔로워 수를 보여줌 #}
+                    {% if user and user.id %} {# user가 없으면 user.id를 실행할 경우 오류가 나므로 이렇게 씀 #}
                     <div class="user-name">{{'안녕하세요! ' + user.nick +'님'}}</div>
                     <div class="half">
                         <div>팔로잉</div>
@@ -23,8 +24,8 @@
                         <div class="count follower-count">{{followerCount}}</div>
                     </div>
                     <input id="my-id" type="hidden" value="{{user.id}}">
-                    <a id="my-profile" href="/profile" class="btn">내 프로필</a>
-                    <a id="logout" href="/auth/logout" class="btn">로그아웃</a>
+                    <a id="my-profile" href="/profile" class="btn">내 프로필</a> {# http://127.0.0.1:8001/profile에 get 요청 #}
+                    <a id="logout" href="/auth/logout" class="btn">로그아웃</a> {# http://127.0.0.1:8001/auth/logout에 get 요청 #}
                     {% else %} {# 렌더링 시 user가 존재하지 않으면 로그인이 되어있지x -> 로그인 메뉴를 보여줌 #}
                     <form id="login-form" action="/auth/login" method="post">
                         <div class="input-group">

@@ -62,7 +62,7 @@ router.get('/', async (req, res, next) => {
     });
     res.render("main", {
       title: "sns",
-      twits: posts, // 조회된 post들을 twits로 렌더링
+      twits: posts, // 조회 후 views/main.html 페이지를 렌더링할 때 전체 게시글을 twits 변수로 저장 
     });
   } catch (err) {
     console.error(err);
