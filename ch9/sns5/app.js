@@ -76,6 +76,7 @@ app.use((req,res,next)=>{
     next(error);
 });
 
+// 에러 관련 함수 
 app.use((err, req, res, next) => {
     res.locals.message = err.message;
     res.locals.error = process.env.NODE_ENV !== 'production' ? err : {}; // 개발용

@@ -31,26 +31,37 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
 });
 
 // 로컬 로그인 라우터, /auth/login
-router.post('/login', isNotLoggedIn, (req, res, next) =>{
+router.post('/login', isNotLoggedIn, (req, res, next) =>{ // 콜백 함수 실행
     passport.authenticate('local', (authError, user, info) => { // passport.authenticate('local') 미들웨어가 로컬로그인 전략(passport/localStrategy.js) 수행
                                                                 // 미들웨어인데 라우터 미들웨어 안에 들어있음 - 미들웨어에 사용자 정의 기능을 추가하고 싶은 경우
         if(authError){ // 로그인 전략(동작)이 실패한 경우 - authError 에 값이 존재
             console.error(authError);
-            return next(authError);
+            return next(authError); // app.js의 에러관련 함수로 이동
         }
         if(!user){  // 2번째 매개변수 값(user)이 존재하지 않는 경우 - db에 계정이 X
             return res.redirect(`/?loginError=${info.message}`);
         }
         // 2번째 매개변수 값(user)이 존재하는 경우 - passport가 req 객체에 login, logout 메서드를 추가함
+        // console.log(1);
+
         return req.login(user, (loginError) => { // req.login은 passport.serializeUser를 호출 - req.login에 제공하는 user 객체가 serializeUser로 넘어가게 됨
             if(loginError) {
                 console.error(loginError);
                 return next(loginError);
             }
+            // console.log(3);
             return res.redirect('/');
         });
     })(req, res, next); // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙힘
 });
+
+/*
+router.post('/login',passport.authenticate('local',{
+    failureRedirect:'/',
+}),(req,res)=>{
+    res.redirect('/');
+})
+*/
 
 // 로그아웃 라우터, /auth/logout
 router.get('/logout', isLoggedIn, (req, res) => {

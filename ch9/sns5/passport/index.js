@@ -9,8 +9,10 @@ module.exports = () => {
 
     // serializeUser: 사용자 정보 객체를 세션에 아이디로 저장
     passport.serializeUser((user,done) => { // serializeUser: 로그인 시 실행됨, req.session(세션) 객체에 어떤 데이터를 저장할지 정하는 메서드
+        // console.log(2);
         done(null, user.id); // done 첫 번째 인수: 에러 발생 시 사용, done 두 번째 인수: 저장하고 싶은 데이터를 넣음
                              // user.id만 저장한 이유: 세션에 user의 모든 정보를 저장하면 서버의 용량이 낭비되기 때문
+        // console.log(4);
     });
     
     // deserializeUser: 세션에 저장한 아이디를 통해 사용자 정보 객체를 불러옴
