@@ -8,11 +8,11 @@
         <div>
             <form id="twit-form" action="/post" method="post" enctype="multipart/form-data"> 
                 <div class="input-group">
-                    <textarea id="twit" name="content" maxlength="140"></textarea>
+                    <textarea id="twit" name="content" maxlength="140"></textarea> {# req.body.content #}
                 </div>
                 <div class="img-preview">
                     <img id="img-preview" src="" style="display: none;" width="250" alt="미리보기"> {# 아래의 js로 src 안에 미리보기 주소를 넣음#}
-                    <input id="img-url" type="hidden" name="url">
+                    <input id="img-url" type="hidden" name="url"> {# req.body.url #}
                 </div>
                 <div>
                     <label id="img-label" for="img">사진 업로드</label> {# for: input의 id값 #}
@@ -22,6 +22,8 @@
             </form>
         </div>
         {% endif %}
+
+
         {# 2. 모든 사람에게 보여줌 #}
         <div class="twits">
             <form id="hashtag-form" action="/hashtag">

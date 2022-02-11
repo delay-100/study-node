@@ -49,7 +49,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) =>{ // 콜백 함수 실�
                 console.error(loginError);
                 return next(loginError);
             }
-            // console.log(3);
+            // console.log(3);  
             return res.redirect('/');
         });
     })(req, res, next); // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙힘
