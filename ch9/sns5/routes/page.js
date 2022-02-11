@@ -17,7 +17,7 @@ router.use((req, res, next) => {
 
 // http://127.0.0.1:8001/hashtag 에 get요청이 왔을 때
 router.get('/hashtag', async (req, res, next) => {
-  const query = req.query.hashtag; // querystring으로 해시태그를 받고 (routes/post.js에서 url로 보냈었음..?)
+  const query = req.query.hashtag; // router.get은 req.body를 쓰지 않고 req.query로 값 전달
   if (!query) { // query가 없는 경우(해시태그가 없는 경우)
     return res.redirect('/'); // 메인페이지로 돌려보냄
   }
@@ -28,7 +28,7 @@ router.get('/hashtag', async (req, res, next) => {
     }); // 해당 query 값이 Hashtag 테이블에 있는지 검색  
     let posts = [];
     if (hashtag){
-      posts = await hashtag.getPosts({include: [{model: User}]}); // 있으면 모든 게시글을 가져옴
+      posts = await hashtag.getPosts({include: [{model: User}]}); // 있으면 해당 해시태그를 가진 모든 게시글을 가져옴
     }
     return res.render('main', { 
       title: `${query}|sns`,
