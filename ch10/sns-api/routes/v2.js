@@ -1,11 +1,19 @@
 // api 사용량 제한을 추가한 v2 라우터
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 const { verifyToken, apiLimiter } = require('./middlewares');
 const { Domain, User, Post, Hashtag } = require('../models');
 
 const router = express.Router();
+
+// 응답에 Access-Control-Allow-Origin 헤더가 추가됨
+// v2의 모든 라우터에 적용
+router.use(cors({
+    credentials: true, // true: 다른 도메인과 쿠키가 공유됨, 서버 간의 도메인이 다른 경우에는 이 옵션을 활성화하지 않으면 로그인이 되지 않을 수 있음
+                       // axios에서도 도메인이 다른데, 쿠키를 공유해야 하는 경우 withCredentials: true 옵션으로 요청을 보내야 함
+}));
 
 router.post('/token', apiLimiter, async (req, res) => { // apiLimiter: routes/middlewares.js의 사용량 제한 미들웨어 추가
     const { clientSecret } = req.body;
