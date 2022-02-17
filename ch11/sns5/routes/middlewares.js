@@ -16,7 +16,7 @@ exports.isNotLoggedIn = (req, res, next) => {
     if(!req.isAuthenticated()){
         next(); // 다음 미들웨어로 넘겨줌
     } else{ // 로그인이면 허용
-        const message = encodeURIComponent('로그인한 컴포넌트입니다.');
+        const message = encodeURIComponent('로그인한 상태입니다.');
         res.redirect(`/?error=${message}`); // 에러 페이지로 바로 이동시킴
     }
 };

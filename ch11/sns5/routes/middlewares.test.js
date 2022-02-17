@@ -2,7 +2,6 @@
 //     expect(1+1).toEqual(3);
 // });
 
-const { describe } = require('../models/user');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares'); 
 
 describe('isLoggedIn', () => { // describe 함수: 테스트를 그룹화해줌, 첫 번째 인수(isLoggedIn): 그룹에 대한 설명, 두 번째 인수(()=>{}): 그룹에 대한 내용
@@ -25,8 +24,8 @@ describe('isLoggedIn', () => { // describe 함수: 테스트를 그룹화해줌,
             isAuthenticated: jest.fn(() => false),
         };
         isLoggedIn(req, res, next);
-        expect(res.status).toBeCalledTimes(403);
-        expect(res.send).toBeCalledTimes('로그인 필요');
+        expect(res.status).toBeCalledWith(403);
+        expect(res.send).toBeCalledWith('로그인 필요');
     });
 });
 
@@ -42,7 +41,7 @@ describe('isNotLoggedIn', () => {
         };
         isNotLoggedIn(req, res, next);
         const message = encodeURIComponent('로그인한 상태입니다.');
-        expect(res.redirect).toBeCalledTimes(`/?error=${message}`);
+        expect(res.redirect).toBeCalledWith(`/?error=${message}`);
     });
 
     test('로그인이되어 있지 않으면 isNotLoggedIn이 next를 호출해야 함', () => {

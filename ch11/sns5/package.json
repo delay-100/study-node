@@ -4,8 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "nodemon app",
     "test": "jest",
-    "start": "nodemon app"
+    "coverage": "jest --coverage"
   },
   "author": "delay100",
   "license": "ISC",
