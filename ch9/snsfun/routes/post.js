@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Post, Hashtag, User } = require('../models');
+const { Post, Hashtag } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
@@ -66,7 +66,7 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {// uploa
     }
 });
 
-// POST /post/remove 라우터, 게시글 업로드 처리
+// POST /post/postOneRemove 라우터, 게시글 업로드 처리
 router.post('/postOneRemove', async (req, res, next) => {
     // , isLoggedIn
     try{

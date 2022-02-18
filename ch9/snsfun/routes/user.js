@@ -32,6 +32,7 @@ router.post('/unfollow', isLoggedIn, async (req, res, next) => {
         await Follow.destroy({
             where:{
                 followingId: followingId,
+                followerId: req.user.id,
             }
         });
         return res.json({status:'true'});

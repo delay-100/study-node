@@ -32,7 +32,7 @@ module.exports = class User extends Sequelize.Model { // User 모델을 만들�
             underscored: false, // true: create_at같이(스네이크 케이스), false: createdAt같이(캐멀 케이스) 
             modelName: 'User',
             tableName: 'users',
-            paranoid: true, // 컬럼을 지워도 완전히 지워지지 않고 deletedAt이라는 컬럼이 생김(지운 시각이 기록됨)
+            paranoid: false, // 컬럼을 지워도 완전히 지워지지 않고 deletedAt이라는 컬럼이 생김(지운 시각이 기록됨)
             charset: 'utf8',
             collate: 'utf8_general_ci',
         });
