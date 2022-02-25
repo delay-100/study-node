@@ -1,7 +1,6 @@
 {
   "name": "gif-chat",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app"
@@ -14,9 +13,11 @@
     "express": "^4.17.3",
     "express-session": "^1.17.2",
     "morgan": "^1.10.0",
-    "nunjucks": "^3.2.3"
+    "nunjucks": "^3.2.3",
+    "ws": "^8.5.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"
-  }
+  },
+  "description": ""
 }
