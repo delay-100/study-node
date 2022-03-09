@@ -8,15 +8,11 @@
   "author": "delay100",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.26.0",
-    "color-hash": "^2.0.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "express-session": "^1.17.2",
-    "mongoose": "^6.2.4",
     "morgan": "^1.10.0",
-    "multer": "^1.4.4",
     "nunjucks": "^3.2.3",
     "socket.io": "^2.4.1",
     "ws": "^8.5.0"

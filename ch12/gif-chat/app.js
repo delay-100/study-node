@@ -10,6 +10,7 @@ dotenv.config(); // .env 파일을 쓸 수 있게 함
 const webSocket = require('./socket'); // 웹 소켓
 // 라우터 연결
 const indexRouter = require('./routes');
+const connect = require('./schemas');
 
 const app = express();
 app.set('port', process.env.PORT || 8005); // 포트번호 설정
@@ -19,6 +20,7 @@ nunjucks.configure('views', {
     express: app,
     watch: true,
 });
+connect();
 
 app.use(morgan('dev')); // morgan 연결 후 localhost:3000에 다시 접속하면 기존 로그 외 추가적인 로그를 볼 수 있음
 
@@ -43,6 +45,15 @@ app.use(session({
     },
 }));
 
+// 세션 아이디를 HEX 형식의 색상 문자열(#000000 같은)로 바꿈
+app.use((req, res, next) => {
+    if (!req.session.color) {
+        const colorHash = new ColorHash();
+        req.session.color = colorHash.hex(req.sessionID); // 앞으로 req.session.color을 사용자 아이디처럼 사용 가능
+    }
+    next();
+});
+
 // 라우터 연결
 app.use('/', indexRouter);
 
@@ -66,4 +77,4 @@ const server = app.listen(app.get('port'), () => {
     console.log(app.get('port'), '번 포트에서 대기 중');
 });
 
-webSocket(server);
+webSocket(server, app);

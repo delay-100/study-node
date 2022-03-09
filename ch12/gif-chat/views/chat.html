@@ -1,0 +1,68 @@
+{% extends 'layout.html' %} 
+
+{% block content %} 
+    <h1>{{title}}</h1>
+    <a href="/" id="exit-btn">방 나가기</a>
+    <fieldset>
+        <legend>채팅 내용</legend>
+        <div id="chat-list">
+            {% for chat in chats %} 
+            {% if chat.user === user %} 
+                <div class="mine" style="color: {{chat.user}}">  <!-- mine: 내 메세지 -->
+                    <div>{{chat.user}}</div>
+                    {% if chat.gif %}}  
+                        <img src="/gif/{{chat.gif}}">
+                    {% else %} 
+                    <div>{{chat.chat}}</div>
+                    {% endif %} 
+                </div>
+            {% elif chat.user === 'system' %} 
+                <div class="system"> <!-- system: 시스템 메세지 -->
+                    <div>{{chat.chat}}</div>
+                </div>
+            {% else %}
+                <div class="other" style="color:{{chat.user}}"></div> <!-- other: 남의 메세지 -->
+                <div>{{chat.user}}</div>
+                {% if chat.gif %} 
+                    <img src="/gif/{{chat.gif}}">
+                {% else %} 
+                    <div>{{chat.chat}}</div>
+                {% endif %} 
+            </div>
+            {% endif %} 
+        {% endfor %}
+        </div> 
+    </fieldset>
+    <form action="/chat" id="chat-form" method="post" enctype="multipart/formdata">
+        <label for="gif">GIF 올리기</label>
+        <input type="file" id="gif" name="gif" accept="img/gif">
+        <input type="text" id="chat" name="chat">
+        <button type="submit">전송</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script> <!-- socket.io 연결 부분-->
+    <script>
+        const socket = io.connect('http://localhost:8005/chat', { // 네임 스페이스: 주소 뒤에 /chat이 붙은 것을 말함, 서버에서 /chat 네임스페이스를 통해 보낸 데이터만 받을 수 있음
+            path: '/socket.io',
+        });
+        
+        // 사용자의 입장을 알리는 메시지 표시
+        socket.on('join', function(data) { // 사용자의 채팅방 입장에 대한 데이터를 웹 소켓에 전송, 소켓에 join 이벤트 리스너 연결
+            const div = document.createElement('div');
+            div.classList.add('system');
+            const chat = document.createElement('div');
+            div.textContent = data.chat;
+            div.appendChild(chat);
+            document.querySelector('#chat-list').appendChild(div);
+        });
+
+        // 사용자의 퇴장을 알리는 메시지 표시
+        socket.on('exit', function(data) { // 사용자의 채팅방 퇴장에 대한 데이터를 웹 소켓에 전송될 때 실행됨, 소켓에 exit 이벤트 리스너 연결
+            const div = document.createElement('div');
+            div.classList.add('system');
+            const chat = document.createElement('div');
+            div.textContent = data.chat;
+            div.appendChild(chat);
+            document.querySelector('#chat-list').appendChild(div);
+        });
+    </script>
+{% endblock %}
