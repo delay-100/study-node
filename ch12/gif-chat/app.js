@@ -22,6 +22,17 @@ nunjucks.configure('views', {
 });
 connect();
 
+// Socket.IO와 express-session 연결을 위해 변수로 설정(app.js와 socket.js간에 express-session 미들웨어를 공유하기 위함)
+const sessionMiddleware = session({
+    resave: false, // resave : 요청이 올 때 세션에 수정 사항이 생기지 않더라도 세션을 다시 저장할지 설정
+    saveUninitialized: false, // saveUninitialized : 세션에 저장할 내역이 없더라도 처음부터 세션을 생성할지 설정
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+        httpOnly: true,
+        secure: false,
+    },
+});
+
 app.use(morgan('dev')); // morgan 연결 후 localhost:3000에 다시 접속하면 기존 로그 외 추가적인 로그를 볼 수 있음
 
 // static 폴더 설정
@@ -34,16 +45,7 @@ app.use(express.urlencoded({ extended: false }));// extended 옵션이 false면 
 
 app.use(cookieParser(process.env.COOKIE_SECRET)); // .env 파일의 COOKIE_SECRET 변수 사용 - 보안 UP
 
-//express-session, 인수: session에 대한 설정
-app.use(session({
-    resave: false, // resave : 요청이 올 때 세션에 수정 사항이 생기지 않더라도 세션을 다시 저장할지 설정
-    saveUninitialized: false,  // saveUninitialized : 세션에 저장할 내역이 없더라도 처음부터 세션을 생성할지 설정
-    secret: process.env.COOKIE_SECRET,
-    cookie: {
-        httpOnly: true, // httpOnly: 클라이언트에서 쿠키를 확인하지 못하게 함
-        secure: false, // secure: false는 https가 아닌 환경에서도 사용 가능 - 배포할 때는 true로 
-    },
-}));
+app.use(sessionMiddleware); // express-session 설정 넣어줌
 
 // 세션 아이디를 HEX 형식의 색상 문자열(#000000 같은)로 바꿈
 app.use((req, res, next) => {
@@ -77,4 +79,4 @@ const server = app.listen(app.get('port'), () => {
     console.log(app.get('port'), '번 포트에서 대기 중');
 });
 
-webSocket(server, app);
+webSocket(server, app, sessionMiddleware);
