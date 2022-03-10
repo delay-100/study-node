@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');
-const ColorHash = require('color-hash').default;
+const ColorHash = require('color-hash');
 
 dotenv.config(); // .env 파일을 쓸 수 있게 함
 const webSocket = require('./socket'); // 웹 소켓
@@ -57,6 +57,7 @@ app.use((req, res, next) => {
     }
     next();
 });
+
 
 // 라우터 연결
 app.use('/', indexRouter);
