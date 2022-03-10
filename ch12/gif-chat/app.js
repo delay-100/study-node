@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');
+const ColorHash = require('color-hash').default;
 
 dotenv.config(); // .env 파일을 쓸 수 있게 함
 const webSocket = require('./socket'); // 웹 소켓
@@ -31,6 +32,7 @@ const sessionMiddleware = session({
         httpOnly: true,
         secure: false,
     },
+    failureFlash: true, 
 });
 
 app.use(morgan('dev')); // morgan 연결 후 localhost:3000에 다시 접속하면 기존 로그 외 추가적인 로그를 볼 수 있음

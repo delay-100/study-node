@@ -43,7 +43,7 @@ router.post('/room', async (req, res, next) => {
 // GET /room/:id 라우터 - 렌더링 전에 방이 존재하는지, 비밀 방이면 비밀번호가 맞는지, 허용인원 초과하지 않았는지 검사
 router.get('/room/:id', async (req, res, next) => {
     try {
-        const room = await Room.findOne({ _id: req.pararms.id });
+        const room = await Room.findOne({ _id: req.params.id });
         const io = req.app.get('io');
 
         if(!room) {
