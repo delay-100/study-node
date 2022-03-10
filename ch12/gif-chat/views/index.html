@@ -6,7 +6,7 @@
     </head>
     <body>
         <div>F12를 눌러 console 탭과 network 탭을 확인하세요.</div>
-        <script src="/socket.io/socket.io.js"></script> {# Socket.IO에서 클라이언트로 제공하는 스크립트, 실제 파일이 아님 - 이 스크립트로 서버와 유사한 API로 웹 소켓 통신 가능 #}
+        <script src="/socket.io/socket.io.js"></script> <!-- Socket.IO에서 클라이언트로 제공하는 스크립트, 실제 파일이 아님 - 이 스크립트로 서버와 유사한 API로 웹 소켓 통신 가능 #} -->
         <script>
             const socket = io.connect('http://localhost:8005', { // 스크립트가 제공하는 io 객체에 서버 주소를 적어 연결, ws 프로토콜이 아닌 http 프로토콜 사용
                 path: '/socket.io', // 서버의 path 옵션(socket.js의 path)과 같아야 통신 가능

@@ -53,7 +53,7 @@ router.get('/room/:id', async (req, res, next) => {
             return res.redirect('/?error=비밀번호가 틀렸습니다.');
         }
         const { rooms } = io.of('/chat').adapter; // io.of('/chat').adapter.rooms: 방 목록이 들어있음
-        if (rooms && rooms[req.params.id] && room.max <= rooms[req.params.id].lenght) { // io.of('/chat').adapter.rooms[req.params.id]: 해당 방의 소켓 목록이 나옴
+        if (rooms && rooms[req.params.id] && room.max <= rooms[req.params.id].length) { // io.of('/chat').adapter.rooms[req.params.id]: 해당 방의 소켓 목록이 나옴
                                                                                         // 소켓의 수를 세서 참가 인원의 수를 알아낼 수 있음
             return res.redirect('/?error=허용 인원을 초과');
         }

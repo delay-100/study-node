@@ -1,6 +1,6 @@
 // 웹 소켓 로직이 들어있음
 const SocketIO = require('socket.io');
-const axios = require('axios');
+const axios= require('axios');
 const cookieParser = require('cookie-parser');
 const cookie = require('cookie-signature');
 
@@ -63,7 +63,7 @@ module.exports = (server, app, sessionMiddleware) => {
                         headers: {
                             Cookie: `connect.sid=s%3A${connectSID}`, // s%3A 뒷 내용이 암호화된 내용, DELETE /room/:id 라우터에서 요청자가 누군지 확인 가능
                         },
-                    })
+                    })  
                         .then(() => {
                             console.log('방 제거 요청 성공'); 
                         })

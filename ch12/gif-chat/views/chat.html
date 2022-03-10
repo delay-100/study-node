@@ -8,7 +8,7 @@
         <div id="chat-list">
             {% for chat in chats %} 
             {% if chat.user === user %} 
-                <div class="mine" style="color: {{chat.user}}">  <!-- mine: 내 메세지 -->
+                <div class="mine" style="color:{{chat.user}}">  <!-- mine: 내 메세지 -->
                     <div>{{chat.user}}</div>
                     {% if chat.gif %}}  
                         <img src="/gif/{{chat.gif}}">
@@ -41,7 +41,7 @@
     </form>
     <script src="/socket.io/socket.io.js"></script> <!-- socket.io 연결 부분-->
     <script>
-        const socket = io.connect('http://localhost:8005/chat', { // 네임 스페이스: 주소 뒤에 /chat이 붙은 것을 말함, 서버에서 /chat 네임스페이스를 통해 보낸 데이터만 받을 수 있음
+        const socket = io.connect('http://127.0.0.1:8005/chat', { // 네임 스페이스: 주소 뒤에 /chat이 붙은 것을 말함, 서버에서 /chat 네임스페이스를 통해 보낸 데이터만 받을 수 있음
             path: '/socket.io',
         });
         
