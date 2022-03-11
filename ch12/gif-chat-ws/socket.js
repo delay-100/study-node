@@ -2,10 +2,10 @@
 // ws 웹 소켓 - 양방향 통신이므로 client에도 작성해줘야 함 views/index.html
 const WebSocket = require('ws');
 
-module.exports = (server) => {
+module.exports = (server) => { // server: app.js에서 넘겨준 서버
     const wss = new WebSocket.Server({ server });  // express 서버를 웹 소켓 서버와 연결함
                                                    // express(HTTP)와 웹 소켓(WS)은 같은 포트를 공유할 수 있으므로 별도의 작업 필요X
-
+    
     wss.on('connection', (ws, req) => { // 연결 후 웹 소켓 서버(wss)에 이벤트 리스너를 붙힘 - connection 이벤트
                                         // 웹 소켓은 이벤트 기반으로 작동되므로 항상 대기해야 함
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress; // req.headers['x-forwarded-for'] || req.connection.remoteAddress: 클라이언트의 IP를 알아내는 유명한 방법 중 하나
@@ -14,8 +14,8 @@ module.exports = (server) => {
         console.log('새로운 클라이언트 접속', ip);
 
         // 이벤트 리스너(message, error, close) 세 개 연결
-        ws.on('message', (message) => { // 클라이언트로부터 메시지 수신 시(메시지 왔을 때 발생)
-            console.log(message);
+        ws.on('message', (message) => { // 클라이언트로부터 메시지 수신 시(메시지 왔을 때 발생), 클라이언트의 onmessage 실행 시 실행됨
+            console.log(message.toString());
         });
         ws.on('error', (error) => { // 에러 시(웹 소켓 연결 중 문제가 발생한 경우)
             console.error(error);
