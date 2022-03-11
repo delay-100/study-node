@@ -39,6 +39,7 @@ app.use(morgan('dev')); // morgan 연결 후 localhost:3000에 다시 접속하�
 
 // static 폴더 설정
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/gif', express.static(path.join(__dirname, 'uploads'))); // 이미지 제공 uploads 폴더 연결
 
 // body-parser
 app.use(express.json());

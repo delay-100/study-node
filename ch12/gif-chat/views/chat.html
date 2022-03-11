@@ -3,6 +3,7 @@
 {% block content %} 
     <h1>{{title}}</h1>
     <a href="/" id="exit-btn">방 나가기</a>
+    <!-- <div class="member_list">참여자 수: </div> -->
     <fieldset>
         <legend>채팅 내용</legend>
         <div id="chat-list">
@@ -10,7 +11,7 @@
             {% if chat.user === user %} 
                 <div class="mine" style="color:{{chat.user}}">  <!-- mine: 내 메세지 -->
                     <div>{{chat.user}}</div>
-                    {% if chat.gif %}}  
+                    {% if chat.gif %}  
                         <img src="/gif/{{chat.gif}}">
                     {% else %} 
                     <div>{{chat.chat}}</div>
@@ -21,14 +22,14 @@
                     <div>{{chat.chat}}</div>
                 </div>
             {% else %}
-                <div class="other" style="color:{{chat.user}}"></div> <!-- other: 남의 메세지 -->
+                <div class="other" style="color:{{chat.user}}"> <!-- other: 남의 메세지 -->
                 <div>{{chat.user}}</div>
                 {% if chat.gif %} 
                     <img src="/gif/{{chat.gif}}">
                 {% else %} 
                     <div>{{chat.chat}}</div>
                 {% endif %} 
-            </div>
+                </div>
             {% endif %} 
         {% endfor %}
         </div> 
@@ -39,6 +40,7 @@
         <input type="text" id="chat" name="chat">
         <button type="submit">전송</button>
     </form>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="/socket.io/socket.io.js"></script> <!-- socket.io 연결 부분-->
     <script>
         const socket = io.connect('http://127.0.0.1:8005/chat', { // 네임 스페이스: 주소 뒤에 /chat이 붙은 것을 말함, 서버에서 /chat 네임스페이스를 통해 보낸 데이터만 받을 수 있음
@@ -47,6 +49,9 @@
         
         // 사용자의 입장을 알리는 메시지 표시
         socket.on('join', function(data) { // 사용자의 채팅방 입장에 대한 데이터를 웹 소켓에 전송, 소켓에 join 이벤트 리스너 연결
+            // console.log('ddddddddddddddddddddd');
+            // console.log(data);
+            // document.querySelector('.member_list').text(data.member);
             const div = document.createElement('div');
             div.classList.add('system');
             const chat = document.createElement('div');
@@ -54,6 +59,8 @@
             div.appendChild(chat);
             document.querySelector('#chat-list').appendChild(div);
         });
+
+        // 'join' || 'exit' 가능!
 
         // 사용자의 퇴장을 알리는 메시지 표시
         socket.on('exit', function(data) { // 사용자의 채팅방 퇴장에 대한 데이터를 웹 소켓에 전송될 때 실행됨, 소켓에 exit 이벤트 리스너 연결
@@ -64,5 +71,72 @@
             div.appendChild(chat);
             document.querySelector('#chat-list').appendChild(div);
         });
+
+        // socket에 chat 이벤트리스너 추가
+        socket.on('chat', function (data) {
+            const div = document.createElement('div');
+            if (data.user === '{{user}}') { // 채팅 메시지 발송자(data.user)에 따라 내 메시지(mine 클래스)인지 남의 메시지(other 클래스)인지 비교
+                div.classList.add('mine');
+            } else {
+                div.classList.add('other');
+            }
+            const name = document.createElement('div');
+            name.textContent = data.user;
+            div.appendChild(name);
+            if (data.chat) {
+                const chat = document.createElement('div');
+                chat.textContent = data.chat;
+                div.appendChild(chat);
+            } else {
+                const gif = document.createElement('img');
+                gif.src = '/gif/' + data.gif;
+                div.appendChild(gif);
+            }
+            div.style.color = data.user;
+            document.querySelector('#chat-list').appendChild(div);
+        });
+
+        // 채팅을 전송하는 폼에 submit 이벤트 리스너 추가
+        document.querySelector('#chat-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (e.target.chat.value) {
+                axios.post('/room/{{room._id}}/chat', {
+                    chat: this.chat.value,
+                })
+                    .then(() => {
+                        e.target.chat.value = '';
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    });
+            }
+        });
+
+        // 프런트 화면에서 이미지를 선택해 업로드하는 이벤트 리스너
+        document.querySelector('#gif').addEventListener('change', function (e) {
+            console.log(e.target.files);
+            const formData = new FormData();
+            formData.append('gif', e.target.files[0]);
+            axios.post('/room/{{room._id}}/gif', formData)
+                .then(() => {
+                    e.target.file = null;
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        });
+
+        //  // WebSocket(웹 소켓, 라우터 없이 채팅 구현)으로 채팅을 전송하는 폼에 submit 이벤트 리스너 추가
+        //  document.querySelector('#chat-form').addEventListener('submit', function (e) {
+        //     e.preventDefault();
+        //     if (e.target.chat.value) {
+        //         socket.emit('chat', {
+        //             room: '{{room._id}}',
+        //             user: '{{user}}',
+        //             chat: e.target.chat.value
+        //         });
+        //         e.target.chat.value = '';
+        //     }
+        // });
     </script>
 {% endblock %}

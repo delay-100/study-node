@@ -34,8 +34,13 @@ module.exports = (server, app, sessionMiddleware) => {
     // chat 네임스페이스
     chat.on('connection', (socket) => { // 이벤트리스너를 붙혀줌
         console.log('chat 네임스페이스에 접속');
+      
         const req = socket.request;
         const { headers: { referer }} = req; // socket.request.headers.referer: 현재 웹 페이지의 URL 가져올 수 있음, referer: 하이퍼링크를 통해서 각각의 사이트로 방문시 남는 흔적
+        
+        // console.log('1111111111111');
+        // console.log(socket.adapter.rooms[referer]);
+
         const roomId = referer // roomId로 같은 채팅방에 있는 사람인지 구분
             .split('/')[referer.split('/').length -1]
             .replace(/\?.+/, ''); // split과 replace로 방의 id를 가져옴
@@ -54,9 +59,13 @@ module.exports = (server, app, sessionMiddleware) => {
                 socket.leave(roomId); // chat 네임스페이스에 접속 해제 시 socket.join 메소드 실행 - 방에서 나가는 메서드
                                       // 연결이 끊기면 자동으로 방에서 나가지만, 확실히 하기 위해 추가
                 const currentRoom = socket.adapter.rooms[roomId]; // socket.adapter.rooms[방 아이디]: 참여 중인 소켓 정보가 들어 있음
+                // console.log(333333333);
+                // console.log(currentRoom);
                 const userCount = currentRoom ? currentRoom.length : 0;
                 if (userCount === 0) { // 방에 인원수가 0명인 경우 
                     const signedCookie = req.signedCookies['connect.sid']; // req.signedCookies 내부의 쿠키들은 모두 복호화되어 있으므로 다시 암호화해서 요청에 담아보내야 함
+                    // console.log(444444444);
+                    // console.log(signedCookie);
                     const connectSID = cookie.sign(signedCookie, process.env.COOKIE_SECRET);
                     axios.delete(`http://localhost:8005/room/${roomId}`, { // 서버에서 axios 요청 시 요청자가 누구인지에 대한 정보가 없음 (브라우저는 자동으로 쿠키를 같이 넣어 보냄)
                                                                          // express-session에서는 세션 쿠키인 req.signedCookies['connect.sid']를 보고 현재 세션이 누구에게 속해있는지 판단함
@@ -77,6 +86,12 @@ module.exports = (server, app, sessionMiddleware) => {
                     });
                 }
             });
+
+        // // WebSocket(웹 소켓, 라우터 없이 채팅 구현)
+        // 라우터 없이 이벤트 리스너 내부에 바로 데이터베이스에 채팅 내용을 저장하는 코드를 넣을 수 있음
+        // socket.on('chat', (data) => {
+        //     socket.to(data.room).emit(data);
+        // });
     });
 };
 //         // 웹 소켓 연결 후 이벤트 리스너를 붙힘
