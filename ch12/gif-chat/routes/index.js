@@ -33,10 +33,11 @@ router.post('/room', async (req, res, next) => {
             owner: req.session.color,
             password: req.body.password,
         });
-        const io = req.app.get('io'); // app.set('io', io)로 저장한 io 객체를 req.app.get('io')로 가져옴
+        const io = req.app.get('io'); // socket.js에서 app.set('io', io)로 저장한 io 객체를 req.app.get('io')로 가져옴
         io.of('/room').emit('newRoom', newRoom); // /room 네임스페이스에 연결한 모든 클라이언트에 데이터를 보내는 메서드, of 메서드: Socket.IO에 다른 네임스페이스를 부여하는 메서드
                                                  // 네임스페이스가 없는 경우에는 io.emit 메서드로 모든 클라이언트에 데이터를 보낼 수 있음
-        res.redirect(`/room/${newRoom._id}?password=${req.body.password}`); // GET / 라우터에 접속한 모든 클라이언트가 새로 생성된 채팅방에 대한 데이터를 받을 수 있음
+                                                 // GET / 라우터에 접속한 모든 클라이언트가 새로 생성된 채팅방에 대한 데이터를 받을 수 있음
+        res.redirect(`/room/${newRoom._id}?password=${req.body.password}`); 
     } catch (error) {
         console.error(error);
         next(error);
@@ -47,7 +48,7 @@ router.post('/room', async (req, res, next) => {
 router.get('/room/:id', async (req, res, next) => {
     try {
         const room = await Room.findOne({ _id: req.params.id });
-        const io = req.app.get('io');
+        const io = req.app.get('io'); // socket.js에서 app.set('io', io)로 저장한 io 객체를 req.app.get('io')로 가져옴
 
         if(!room) {
             return res.redirect('/?error=존재하지 않는 방입니다.');
@@ -56,21 +57,17 @@ router.get('/room/:id', async (req, res, next) => {
             return res.redirect('/?error=비밀번호가 틀렸습니다.');
         }
         const { rooms } = io.of('/chat').adapter; // io.of('/chat').adapter.rooms: 방 목록이 들어있음
-        // console.log('zzzzzzzzzz');
-        // console.log(rooms);
         if (rooms && rooms[req.params.id] && room.max <= rooms[req.params.id].length) { // io.of('/chat').adapter.rooms[req.params.id]: 해당 방의 소켓 목록이 나옴
                                                                                         // 소켓의 수를 세서 참가 인원의 수를 알아낼 수 있음
             return res.redirect('/?error=허용 인원이 초과하였습니다.');
         }
         const chats = await Chat.find({ room: room._id}).sort('createdAt'); // DB로부터 채팅내역을 가져옴
-        // console.log('zzzzzzzzzz');
-        // console.log(rooms[req.params.id]);
         return res.render('chat', {
             room,
             title: room.title,
             chats, // chats: chats
             user: req.session.color,
-            member: rooms && rooms[req.params.id],
+            // member: rooms && rooms[req.params.id],
         });
     } catch (error) {
         console.error(error);
