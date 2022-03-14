@@ -37,6 +37,7 @@ router.post('/room', async (req, res, next) => {
         io.of('/room').emit('newRoom', newRoom); // /room 네임스페이스에 연결한 모든 클라이언트에 데이터를 보내는 메서드, of 메서드: Socket.IO에 다른 네임스페이스를 부여하는 메서드
                                                  // 네임스페이스가 없는 경우에는 io.emit 메서드로 모든 클라이언트에 데이터를 보낼 수 있음
                                                  // GET / 라우터에 접속한 모든 클라이언트가 새로 생성된 채팅방에 대한 데이터를 받을 수 있음
+                                                 // emit 메서드 첫 번째 인수: 이벤트 이름, 두 번째 인수: 데이터 
         res.redirect(`/room/${newRoom._id}?password=${req.body.password}`); 
     } catch (error) {
         console.error(error);
