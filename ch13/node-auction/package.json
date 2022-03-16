@@ -9,6 +9,7 @@
   "author": "delay100",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
@@ -17,6 +18,8 @@
     "multer": "^1.4.4",
     "mysql2": "^2.3.3",
     "nunjucks": "^3.2.3",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
     "sequelize": "^6.17.0",
     "sequelize-cli": "^6.4.1"
   },
