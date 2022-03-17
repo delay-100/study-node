@@ -27,13 +27,15 @@
             <button class="btn" type="submit">입찰</button>
         </form>
     </div>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script> <!-- axios -->
-    <script src="https://unpkg.com/event-source-polyfill/src/eventsource.min.js"></script> <!-- EventSource 폴리필-->
-    <srcipt src="/socket.io/socket.io.js"></srcipt> <!-- Socket.IO 클라이언트 스크립트 -->
-    <script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/event-source-polyfill/src/eventsource.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+       <script>
+
         // 입찰 시 POST /good/:id/bid로 요청 보내기
         document.querySelector('#bid-form').addEventListener('submit', (e) => {
             e.preventDefault();
+            const errorMessage = document.querySelector('.error-message');
             axios.post('/good/{{good.id}}/bid', { // 입찰 진행
                 bid: e.target.bid.value,
                 msg: e.target.msg.value,
@@ -45,7 +47,9 @@
             .finally(() => {
                 e.target.bid.value = '';
                 e.target.msg.value = '';
-                e.textContent = '';
+                // console.log(1111111111111111);
+                // console.log(errorMessage);
+                errorMessage.textContent = '';
             });
         });
 
@@ -61,22 +65,21 @@
             } else {
                 const t = end - server;
                 const seconds = ('0' + Math.floor((t/1000) % 60)).slice(-2);
-                const minutes = ('0' + Math.floor(t/1000/60)%60).slice(-2);
-                const hours = ('0' + Math.floor(t/(1000*60*60))%24).slice(-2);
+                const minutes = ('0' + Math.floor((t/1000/60)%60)).slice(-2);
+                const hours = ('0' + Math.floor((t/(1000*60*60))%24)).slice(-2);
                 return time.textContent = hours +':'+minutes+':'+seconds;
             }
         };
         // console.log(io);
-        const socket = io.connect('http://localhost:8010', {
+        const socket = io.connect('http://127.0.0.1:8010', {
             path: '/socket.io'
         });
-            // console.log(data);
-            // console.log(11111111111111);
         // 다른 사람이 입찰했을 때 Socket.IO로 입찰 정보를 렌더링하는 것
         socket.on('bid', (data) => { // 누군가 입찰했을 때
             const div = document.createElement('div');
             let span = document.createElement('span');
   
+            console.log(data);
             span.textContent = data.nick +'님: ';
             const strong = document.createElement('strong');
             strong.textContent = data.bid + '원에 입찰하셨습니다.';
