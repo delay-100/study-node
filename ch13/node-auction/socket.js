@@ -1,7 +1,7 @@
 const SocketIO = require('socket.io');
 
 module.exports = (server, app) => {
-    const io = SocketIO(server, { path: '/socket.io '});
+    const io = SocketIO(server, { path: '/socket.io'});
     app.set('io', io);
     io.on('connection', (socket) => { // 기본(/) 네임스페이스 연결
         const req = socket.request; // 경매 화면에서 실시간으로 입찰 정보를 올리기 위해 웹 소켓 사용

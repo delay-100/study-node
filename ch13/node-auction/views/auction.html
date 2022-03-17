@@ -70,10 +70,13 @@
         const socket = io.connect('http://localhost:8010', {
             path: '/socket.io'
         });
+            // console.log(data);
+            // console.log(11111111111111);
         // 다른 사람이 입찰했을 때 Socket.IO로 입찰 정보를 렌더링하는 것
         socket.on('bid', (data) => { // 누군가 입찰했을 때
             const div = document.createElement('div');
             let span = document.createElement('span');
+  
             span.textContent = data.nick +'님: ';
             const strong = document.createElement('strong');
             strong.textContent = data.bid + '원에 입찰하셨습니다.';

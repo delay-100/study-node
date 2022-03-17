@@ -119,13 +119,10 @@ router.post('/good/:id/bid', isLoggedIn, async (req, res, next) => {
         }
         const result = await Auction.create({
             bid,
-            msg,
-            UserId: req.userid,
+            msg, 
+            UserId: req.user.id,
             GoodId: req.params.id,
         });
-        
-        // console.log(11111111111);
-        // console.log(io);
         // 실시간으로 입찰 내역 전송
         req.app.get('io').to(req.params.id).emit('bid', {
             bid: result.bid,
