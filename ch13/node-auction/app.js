@@ -14,9 +14,11 @@ const { sequelize } = require('./models');
 const passportConfig = require('./passport');
 const sse = require('./sse');
 const webSocket = require('./socket');
+const checkAuction = require('./checkAuction');
 
 const app = express();
 passportConfig();
+checkAuction(); // 서버를 재시작하면 앞으로 서버를 시작할 때마다 낙찰자를 지정하는 작업 수행
 app.set('port', process.env.PORT || 8010);
 app.set('view engine', 'html');
 nunjucks.configure('views', {

@@ -26,17 +26,18 @@
       {% endfor %}
     </table>
   </div>
-  <script src="https://unpkg.com/event-source-polyfill/src/eventsource.min.js"></script>
-  <script>
-    const es = new EventSource('/sse');
-    es.onmessage = function (e) {
+  <script src="https://unpkg.com/event-source-polyfill/src/eventsource.min.js"></script> <!-- 첫 번째 스크립트: IE와 엣지 브라우저에서도 서버센트 이벤트를 사용할 수 있음-->
+  <script> // 두 번째 스크립트: EventSource를 사용해 서버센트 이벤트를 받는 코드
+    const es = new EventSource('/sse'); // new EventSource('/sse'): 서버와 연결
+    es.onmessage = function (e) { // es.onmessage 또는 es.addEventListen('message') 이벤트 리스너: 서버로부터 데이터를 받을 수 있음
       document.querySelectorAll('.time').forEach((td) => {
         const end = new Date(td.dataset.start); // 경매 시작 시간
-        const server = new Date(parseInt(e.data, 10));
+        const server = new Date(parseInt(e.data, 10)); // e.data: 서버로 부터 받은 데이터가 들어있음
         end.setDate(end.getDate() + 1); // 경매 종료 시간
         if (server >= end) { // 경매가 종료되었으면
           return td.textContent = '00:00:00';
         } else {
+          // 서버 시간과 경매 종료 시간을 계산해 카운트다운하는 코드, 24시간동안 카운트 되도록 함
           const t = end - server; // 경매 종료까지 남은 시간
           const seconds = ('0' + Math.floor((t / 1000) % 60)).slice(-2);
           const minutes = ('0' + Math.floor((t / 1000 / 60) % 60)).slice(-2);
