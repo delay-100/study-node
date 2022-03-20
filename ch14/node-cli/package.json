@@ -6,6 +6,6 @@
   "author": "delay100",
   "license": "ISC",
   "bin": {
-    "cli": "./template.js"
+    "cli": "./template2.js"
   }
 }
