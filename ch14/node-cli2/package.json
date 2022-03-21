@@ -2,14 +2,14 @@
   "name": "node-cli2-delay100",
   "version": "1.0.0",
   "description": "",
-  "main": "command.js",
+  "main": "index.js",
   "author": "delay100",
   "license": "ISC",
   "bin": {
     "cli": "./command.js"
   },
   "dependencies": {
-    "chalk": "^5.0.1",
+    "chalk": "^3.0.0",
     "commander": "^5.1.0",
     "inquirer": "^8.2.1"
   }
