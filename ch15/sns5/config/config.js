@@ -1,23 +1,26 @@
-{
+require('dotenv').config();
+
+module.exports = {
   "development": {
     "username": "root",
-    "password": "system",
+    "password": process.env.SEQUELIZE_PASSWORD,
     "database": "sns",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "system",
+    "password": process.env.SEQUELIZE_PASSWORD,
     "database": "sns_test",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
-    "password": null,
-    "database": "database_production",
+    "password": process.env.SEQUELIZE_PASSWORD,
+    "database": "sns",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": false,
   }
 }
