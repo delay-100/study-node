@@ -9,8 +9,15 @@ const dotenv = require('dotenv');
 const passport = require('passport');
 const helmet = require('helmet');
 const hpp = require('hpp');
+const redis = require('redis');
+const RedisStore = require('connect-redis')(session); 
 
 dotenv.config(); // .env 파일을 쓸 수 있게 함
+const redisClient = redis.createClient({
+    url: 'redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}',
+    password: process.env.REDIS_PASSWORD,
+});
+
 // 라우터 연결
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
@@ -67,6 +74,7 @@ const sessionOption = {
         httpOnly: true,
         secure: false,
     },
+    store: new RedisStore({ client: redisClient}),
 };
 if (process.env.NODE_ENV === 'production') {
     sessionOption.proxy = true; // 배포환경일 경우 sessionOption을 true로 변경(필수x, https적용을 위해 노드 서버 앞에 다른 서버를 두었을 경우만)
